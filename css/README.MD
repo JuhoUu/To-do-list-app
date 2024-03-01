@@ -1,1 +1,0 @@
-Web-sovellusten kehittäminen Javascriptillä-kurssin ensimmäinen projekti. Tarkoituksena oli luoda To Do-lista, jossa hyödynnetään DOM-scriptausta ja smart formeja.
