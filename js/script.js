@@ -5,23 +5,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoList = document.getElementById('todo-list');
     const openTasksCounter = document.getElementById('open-tasks-counter');
 
-    // Load tasks from localStorage
+    // Ladataan taskit localStoragesta
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Function to render tasks
+    // Koodi tehtävien renderöimiseksi näytölle
     function renderTasks() {
         todoList.innerHTML = '';
         let openTasksCount = 0;
-
+    
         tasks.forEach((task, index) => {
+            // Luodaan uusi listaelementti ja lisätään sille tarvittavat luokat
             const li = document.createElement('li');
             li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
             if (task.completed) {
+                // Jos tehtävä on suoritettu, lisätään sille "completed"-luokka
                 li.classList.add('completed');
             } else {
+                // Muuten kasvatetaan avointen tehtävien laskuria
                 openTasksCount++;
             }
-
+    
+            // Luodaan checkbox, joka merkitsee tehtävän suoritetuksi
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.checked = task.completed;
@@ -30,11 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleTask(index);
             });
             li.appendChild(checkbox);
-
+    
+            // Luodaan tekstielementti tehtävän tekstille
             const taskText = document.createElement('span');
             taskText.textContent = task.text;
             li.appendChild(taskText);
-
+    
+            // Luodaan poistonappi tehtävälle
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
@@ -43,34 +49,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 removeTask(index);
             });
             li.appendChild(deleteButton);
-
+    
+            // Lisätään luotu listaelementti tehtävälistalle
             todoList.appendChild(li);
         });
-
+    
+        // Päivitetään avointen tehtävien laskuri näyttämään oikea lukumäärä
         openTasksCounter.textContent = openTasksCount;
-
+    
+        // Tallennetaan tehtävät paikalliseen tallennustilaan
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+    
 
-    // Function to add new task
+    // Funktio taskien lisäämiseksi
     function addTask(text) {
         tasks.push({ text, completed: false });
         renderTasks();
     }
 
-    // Function to remove task
+    // Funktio taskien poistamiseksi
     function removeTask(index) {
         tasks.splice(index, 1);
         renderTasks();
     }
 
-    // Function to toggle task completion
+    // Funktio taskin tilan vaihtamiseksi
     function toggleTask(index) {
         tasks[index].completed = !tasks[index].completed;
         renderTasks();
     }
 
-    // Event listener for form submission
+    // Estetään lomakkeen lähettäminen ja lisätään taski  tehtävälistaan, jos syöte on vähintään kolme merkkiä pitkä
     todoForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const taskText = todoInput.value.trim();
